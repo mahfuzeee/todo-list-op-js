@@ -1,0 +1,282 @@
+:root {
+  --bg-color: #f4f4f9;
+  --sidebar-bg: #2c3e50;
+  --text-light: #ecf0f1;
+  --text-dark: #2c3e50;
+  --primary: #3498db;
+  --danger: #e74c3c;
+  --success: #2ecc71;
+  --warning: #f39c12;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  display: flex;
+  height: 100vh;
+  background-color: var(--bg-color);
+}
+
+/* Sidebar */
+#sidebar {
+  width: 300px;
+  background-color: var(--sidebar-bg);
+  color: var(--text-light);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+#sidebar h1 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+#project-list {
+  list-style: none;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.project-item {
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  transition: background 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.project-item:hover,
+.project-item.active {
+  background-color: #34495e;
+}
+
+.project-delete {
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 2px 5px;
+  border: none;
+  background: none;
+}
+
+#new-project-btn {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#new-project-btn:hover {
+  background-color: #2980b9;
+}
+
+/* Main Content */
+#main-content {
+  flex-grow: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+#main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+#current-project-title {
+  color: var(--text-dark);
+}
+
+#new-todo-btn {
+  padding: 10px 20px;
+  background-color: var(--success);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#new-todo-btn:hover {
+  background-color: #27ae60;
+}
+
+/* Todo List */
+#todo-list {
+  list-style: none;
+}
+
+.todo-item {
+  background: white;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-left: 5px solid transparent;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.todo-item:hover {
+  transform: translateY(-2px);
+}
+
+.todo-item.priority-high {
+  border-left-color: var(--danger);
+}
+.todo-item.priority-medium {
+  border-left-color: var(--warning);
+}
+.todo-item.priority-low {
+  border-left-color: var(--success);
+}
+
+.todo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.todo-title {
+  font-weight: bold;
+  color: var(--text-dark);
+}
+
+.todo-due-date {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+.todo-details {
+  display: none;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.todo-details.visible {
+  display: block;
+}
+
+.todo-description {
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.todo-notes {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  font-style: italic;
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+}
+
+.todo-actions button {
+  padding: 5px 10px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.btn-complete {
+  background-color: var(--success);
+  color: white;
+}
+.btn-edit {
+  background-color: var(--primary);
+  color: white;
+}
+.btn-delete {
+  background-color: var(--danger);
+  color: white;
+}
+
+.completed .todo-title,
+.completed .todo-due-date {
+  text-decoration: line-through;
+  color: #bdc3c7;
+}
+
+/* Modal */
+#modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+#modal-overlay.visible {
+  display: flex;
+}
+
+#todo-form,
+#project-form {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: var(--text-dark);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-submit {
+  background-color: var(--primary);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.btn-cancel {
+  background-color: #95a5a6;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
