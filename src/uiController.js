@@ -1,17 +1,22 @@
-const UIController = () => {
-  const elements = {
-    projectList: document.getElementById("project-list"),
-    todoList: document.getElementById("todo-list"),
-    currentProjectTitle: document.getElementById("current-project-title"),
-    newProjectBtn: document.getElementById("new-project-btn"),
-    newTodoBtn: document.getElementById("new-todo-btn"),
-    modalOverlay: document.getElementById("modal-overlay"),
-    modalContent: document.getElementById("modal-content"),
-  };
+import { format } from "date-fns";
+import TodoApp from "./todo.js";
 
-  const renderProjects = () => {
+class UiController {
+  constructor() {
+    this.elements = {
+      projectList: document.getElementById("project-list"),
+      todoList: document.getElementById("todo-list"),
+      currentProjectTitle: document.getElementById("current-project-title"),
+      newProjectBtn: document.getElementById("new-project-btn"),
+      newTodoBtn: document.getElementById("new-todo-btn"),
+      modalOverlay: document.getElementById("modal-overlay"),
+      modalContent: document.getElementById("modal-content"),
+    };
+  }
+
+  renderProjects = () => {
     const projects = TodoApp.getProjects();
-    elements.projectList.innerHTML = "";
+    this.elements.projectList.innerHTML = "";
     const currentProj = TodoApp.getCurrentProject();
 
     projects.forEach((project) => {
@@ -23,8 +28,8 @@ const UIController = () => {
       nameSpan.textContent = project.name;
       nameSpan.addEventListener("click", () => {
         TodoApp.setCurrentProject(project.id);
-        renderProjects();
-        renderTodos();
+        this.renderProjects();
+        this.renderTodos();
       });
 
       if (project.name !== "Default") {
@@ -34,22 +39,22 @@ const UIController = () => {
         deleteBtn.addEventListener("click", (e) => {
           e.stopPropagation();
           TodoApp.deleteProject(project.id);
-          renderProjects();
-          renderTodos();
+          this.renderProjects();
+          this.renderTodos();
         });
         li.appendChild(deleteBtn);
       }
 
       li.prepend(nameSpan);
-      elements.projectList.appendChild(li);
+      this.elements.projectList.appendChild(li);
     });
 
-    elements.currentProjectTitle.textContent = currentProj.name;
+    this.elements.currentProjectTitle.textContent = currentProj.name;
   };
 
-  const renderTodos = () => {
+  renderTodos = () => {
     const project = TodoApp.getCurrentProject();
-    elements.todoList.innerHTML = "";
+    this.elements.todoList.innerHTML = "";
 
     project.todos.forEach((todo) => {
       const li = document.createElement("li");
@@ -94,7 +99,7 @@ const UIController = () => {
       completeBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         TodoApp.toggleTodoComplete(todo.id);
-        renderTodos();
+        this.renderTodos();
       });
 
       const editBtn = document.createElement("button");
@@ -111,7 +116,7 @@ const UIController = () => {
       deleteBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         TodoApp.deleteTodo(todo.id);
-        renderTodos();
+        this.renderTodos();
       });
 
       actionsDiv.append(completeBtn, editBtn, deleteBtn);
@@ -124,13 +129,13 @@ const UIController = () => {
           detailsDiv.style.display === "none" ? "block" : "none";
       });
 
-      elements.todoList.appendChild(li);
+      this.elements.todoList.appendChild(li);
     });
   };
 
-  const openTodoModal = (todo = null) => {
+  openTodoModal = (todo = null) => {
     const isEditing = !!todo;
-    elements.modalContent.innerHTML = `
+    this.elements.modalContent.innerHTML = `
                     <form id="todo-form">
                         <h2>${isEditing ? "Edit Todo" : "New Todo"}</h2>
                         <div class="form-group">
@@ -164,11 +169,11 @@ const UIController = () => {
                     </form>
                 `;
 
-    elements.modalOverlay.classList.add("visible");
+    this.elements.modalOverlay.classList.add("visible");
 
     document
       .getElementById("modal-cancel")
-      .addEventListener("click", closeModal);
+      .addEventListener("click", this.closeModal);
     document.getElementById("todo-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const data = {
@@ -190,13 +195,13 @@ const UIController = () => {
           data.notes,
         );
       }
-      closeModal();
-      renderTodos();
+      this.closeModal();
+      this.renderTodos();
     });
   };
 
-  const openProjectModal = () => {
-    elements.modalContent.innerHTML = `
+  openProjectModal = () => {
+    this.elements.modalContent.innerHTML = `
                     <form id="project-form">
                         <h2>New Project</h2>
                         <div class="form-group">
@@ -209,36 +214,40 @@ const UIController = () => {
                         </div>
                     </form>
                 `;
-    elements.modalOverlay.classList.add("visible");
+    this.elements.modalOverlay.classList.add("visible");
 
     document
       .getElementById("modal-cancel")
-      .addEventListener("click", closeModal);
+      .addEventListener("click", this.closeModal);
     document.getElementById("project-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const name = document.getElementById("project-name").value;
       const newProj = TodoApp.addProject(name);
       TodoApp.setCurrentProject(newProj.id);
-      closeModal();
-      renderProjects();
-      renderTodos();
+      this.closeModal();
+      this.renderProjects();
+      this.renderTodos();
     });
   };
 
-  const closeModal = () => {
-    elements.modalOverlay.classList.remove("visible");
-    elements.modalContent.innerHTML = "";
+  closeModal = () => {
+    this.elements.modalOverlay.classList.remove("visible");
+    this.elements.modalContent.innerHTML = "";
   };
 
-  const init = () => {
-    elements.newProjectBtn.addEventListener("click", openProjectModal);
-    elements.newTodoBtn.addEventListener("click", () => openTodoModal());
-    elements.modalOverlay.addEventListener("click", (e) => {
-      if (e.target === elements.modalOverlay) closeModal();
+  init() {
+    this.elements.newProjectBtn.addEventListener(
+      "click",
+      this.openProjectModal,
+    );
+    this.elements.newTodoBtn.addEventListener("click", () =>
+      this.openTodoModal(),
+    );
+    this.elements.modalOverlay.addEventListener("click", (e) => {
+      if (e.target === this.elements.modalOverlay) this.closeModal();
     });
-  };
+  }
+}
 
-  return { init, renderProjects, renderTodos };
-};
-
+const UIController = new UiController();
 export default UIController;

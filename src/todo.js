@@ -1,12 +1,13 @@
 // ==========================================
-// MODULE 1: Application Logic (Factories & State)
+// MODULE 1: Application Logic (class and methods)
 // ==========================================
-const TodoApp = () => {
-  let projects = [];
-  let currentProjectId = null;
+class Todos {
+  constructor() {
+    this.projects = [];
+    this.currentProjectId = null;
+  }
 
-  // Factory: Todo
-  const createTodo = (title, description, dueDate, priority, notes = "") => {
+  createTodo = (title, description, dueDate, priority, notes = "") => {
     return {
       id: Date.now().toString(),
       title,
@@ -21,8 +22,7 @@ const TodoApp = () => {
     };
   };
 
-  // Factory: Project
-  const createProject = (name) => {
+  createProject = (name) => {
     return {
       id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
       name,
@@ -30,79 +30,72 @@ const TodoApp = () => {
     };
   };
 
-  const init = () => {
-    const defaultProject = createProject("Default");
-    projects.push(defaultProject);
-    currentProjectId = defaultProject.id;
-  };
+  init() {
+    const defaultProject = this.createProject("Default");
+    this.projects.push(defaultProject);
+    this.currentProjectId = defaultProject.id;
+  }
 
-  const addProject = (name) => {
-    const newProject = createProject(name);
-    projects.push(newProject);
+  addProject(name) {
+    const newProject = this.createProject(name);
+    this.projects.push(newProject);
     return newProject;
-  };
+  }
 
-  const deleteProject = (projectId) => {
-    projects = projects.filter((p) => p.id !== projectId);
-    if (currentProjectId === projectId && projects.length > 0) {
-      currentProjectId = projects[0].id;
+  deleteProject = (projectId) => {
+    this.projects = this.projects.filter((p) => p.id !== projectId);
+    if (this.currentProjectId === projectId && this.projects.length > 0) {
+      this.currentProjectId = this.projects[0].id;
     }
   };
 
-  const setCurrentProject = (projectId) => {
-    currentProjectId = projectId;
+  setCurrentProject = (projectId) => {
+    this.currentProjectId = projectId;
   };
 
-  const getCurrentProject = () =>
-    projects.find((p) => p.id === currentProjectId);
-  const getProjects = () => projects;
+  getCurrentProject() {
+    return this.projects.find((p) => p.id === this.currentProjectId);
+  }
 
-  const addTodoToCurrentProject = (
-    title,
-    description,
-    dueDate,
-    priority,
-    notes,
-  ) => {
-    const project = getCurrentProject();
+  getProjects() {
+    return this.projects;
+  }
+
+  addTodoToCurrentProject = (title, description, dueDate, priority, notes) => {
+    const project = this.getCurrentProject();
     if (project) {
-      const newTodo = createTodo(title, description, dueDate, priority, notes);
+      const newTodo = this.createTodo(
+        title,
+        description,
+        dueDate,
+        priority,
+        notes,
+      );
       project.todos.push(newTodo);
       return newTodo;
     }
   };
 
-  const deleteTodo = (todoId) => {
-    const project = getCurrentProject();
+  deleteTodo = (todoId) => {
+    const project = this.getCurrentProject();
     project.todos = project.todos.filter((t) => t.id !== todoId);
   };
 
-  const updateTodo = (todoId, updates) => {
-    const project = getCurrentProject();
+  updateTodo = (todoId, updates) => {
+    const project = this.getCurrentProject();
     const todo = project.todos.find((t) => t.id === todoId);
     if (todo) {
       Object.assign(todo, updates);
     }
   };
 
-  const toggleTodoComplete = (todoId) => {
-    const project = getCurrentProject();
+  toggleTodoComplete = (todoId) => {
+    const project = this.getCurrentProject();
     const todo = project.todos.find((t) => t.id === todoId);
     if (todo) todo.toggleComplete();
   };
+}
 
-  return {
-    init,
-    addProject,
-    deleteProject,
-    setCurrentProject,
-    getCurrentProject,
-    getProjects,
-    addTodoToCurrentProject,
-    deleteTodo,
-    updateTodo,
-    toggleTodoComplete,
-  };
-};
+const TodoApp = new Todos();
 
 export default TodoApp;

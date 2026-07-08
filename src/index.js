@@ -1,5 +1,6 @@
 import TodoApp from "./todo.js";
 import UIController from "./uiController.js";
+import "./styles.css";
 // ==========================================
 // INITIALIZATION
 // ==========================================
