@@ -51,7 +51,10 @@ class Todos {
           this.currentProjectId = this.projects[0].id;
         }
       } else {
-        this.currentProjectId = null;
+        // If no projects exist, create Default project
+        const defaultProject = this.createProject("Default");
+        this.projects.push(defaultProject);
+        this.currentProjectId = defaultProject.id;
       }
       return true;
     }

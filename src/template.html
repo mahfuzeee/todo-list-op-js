@@ -7,25 +7,42 @@
     <title>Todo App</title>
   </head>
   <body>
-    <!-- Sidebar for Projects -->
-    <div id="sidebar">
-      <h1>My Todos</h1>
-      <ul id="project-list"></ul>
-      <button id="new-project-btn">+ New Project</button>
-    </div>
-
-    <!-- Main Content for Todos -->
-    <div id="main-content">
-      <div id="main-header">
-        <h2 id="current-project-title">Default</h2>
-        <button id="new-todo-btn">+ New Todo</button>
+    <div class="app-container">
+      <!-- Sidebar for Projects -->
+      <div id="sidebar">
+        <h1>My Todos</h1>
+        <ul id="project-list"></ul>
+        <button id="new-project-btn">+ New Project</button>
       </div>
-      <ul id="todo-list"></ul>
+
+      <!-- Main Content for Todos -->
+      <div id="main-content">
+        <div id="main-header">
+          <h2 id="current-project-title">Default</h2>
+          <button id="new-todo-btn">+ New Todo</button>
+        </div>
+        <ul id="todo-list"></ul>
+      </div>
     </div>
 
     <!-- Modal for Adding/Editing Todos and Projects -->
     <div id="modal-overlay">
       <div id="modal-content"></div>
     </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>Developed by: Md. Mahfuzur Rahman</p>
+      <p>
+        &copy;
+        <script>
+          document.write(new Date().getFullYear());
+        </script>
+        Todo App all rights reserved.
+      </p>
+
+      <a href="http://linkedin.com/in/mahfuzdh" target="_blank">LinkedIn</a>
+      <a href="http://github.com/mahfuzeee" target="_blank">Github</a>
+    </footer>
   </body>
 </html>

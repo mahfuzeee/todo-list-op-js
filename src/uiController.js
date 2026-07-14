@@ -21,7 +21,8 @@ class UiController {
     projects.forEach((project) => {
       const li = document.createElement("li");
       li.classList.add("project-item");
-      if (project.id === currentProj.id) li.classList.add("active");
+      if (currentProj && project.id === currentProj.id)
+        li.classList.add("active");
 
       const nameSpan = document.createElement("span");
       nameSpan.textContent = project.name;
@@ -54,6 +55,8 @@ class UiController {
   renderTodos() {
     const project = TodoApp.getCurrentProject();
     this.elements.todoList.innerHTML = "";
+
+    if (!project) return;
 
     project.todos.forEach((todo) => {
       const li = document.createElement("li");
