@@ -1,6 +1,3 @@
-// ==========================================
-// MODULE 1: Application Logic (class and methods)
-// ==========================================
 class Todos {
   constructor() {
     this.projects = [];
@@ -30,15 +27,49 @@ class Todos {
     };
   };
 
+  saveToLocalStorage() {
+    const data = {
+      projects: this.projects,
+      currentProjectId: this.currentProjectId,
+    };
+    localStorage.setItem("todoApp", JSON.stringify(data));
+  }
+
+  loadFromLocalStorage() {
+    const saved = localStorage.getItem("todoApp");
+    if (saved) {
+      const data = JSON.parse(saved);
+      this.projects = data.projects || [];
+      this.currentProjectId = data.currentProjectId;
+
+      // Ensure currentProjectId is valid
+      if (this.projects.length > 0) {
+        const currentProjectExists = this.projects.find(
+          (p) => p.id === this.currentProjectId,
+        );
+        if (!currentProjectExists || !this.currentProjectId) {
+          this.currentProjectId = this.projects[0].id;
+        }
+      } else {
+        this.currentProjectId = null;
+      }
+      return true;
+    }
+    return false;
+  }
+
   init() {
-    const defaultProject = this.createProject("Default");
-    this.projects.push(defaultProject);
-    this.currentProjectId = defaultProject.id;
+    if (!this.loadFromLocalStorage()) {
+      const defaultProject = this.createProject("Default");
+      this.projects.push(defaultProject);
+      this.currentProjectId = defaultProject.id;
+    }
   }
 
   addProject(name) {
     const newProject = this.createProject(name);
     this.projects.push(newProject);
+    this.saveToLocalStorage();
     return newProject;
   }
 
@@ -47,10 +78,12 @@ class Todos {
     if (this.currentProjectId === projectId && this.projects.length > 0) {
       this.currentProjectId = this.projects[0].id;
     }
+    this.saveToLocalStorage();
   };
 
   setCurrentProject = (projectId) => {
     this.currentProjectId = projectId;
+    this.saveToLocalStorage();
   };
 
   getCurrentProject() {
@@ -72,6 +105,7 @@ class Todos {
         notes,
       );
       project.todos.push(newTodo);
+      this.saveToLocalStorage();
       return newTodo;
     }
   };
@@ -79,6 +113,7 @@ class Todos {
   deleteTodo = (todoId) => {
     const project = this.getCurrentProject();
     project.todos = project.todos.filter((t) => t.id !== todoId);
+    this.saveToLocalStorage();
   };
 
   updateTodo = (todoId, updates) => {
@@ -86,13 +121,17 @@ class Todos {
     const todo = project.todos.find((t) => t.id === todoId);
     if (todo) {
       Object.assign(todo, updates);
+      this.saveToLocalStorage();
     }
   };
 
   toggleTodoComplete = (todoId) => {
     const project = this.getCurrentProject();
     const todo = project.todos.find((t) => t.id === todoId);
-    if (todo) todo.toggleComplete();
+    if (todo) {
+      todo.completed = !todo.completed;
+      this.saveToLocalStorage();
+    }
   };
 }
 

@@ -4,7 +4,7 @@
   "description": "This is a single page web app. Interactive DOM using JavaScript.",
   "main": "./src/index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --mode production",
     "dev": "webpack serve",
     "deploy": "git subtree push --prefix dist origin gh-pages",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -35,8 +35,5 @@
     "webpack": "^5.107.2",
     "webpack-cli": "^7.0.3",
     "webpack-dev-server": "^5.2.5"
-  },
-  "dependencies": {
-    "date-fns": "^4.4.0"
   }
 }

@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import TodoApp from "./todo.js";
 
 class UiController {
@@ -52,7 +51,7 @@ class UiController {
     this.elements.currentProjectTitle.textContent = currentProj.name;
   };
 
-  renderTodos = () => {
+  renderTodos() {
     const project = TodoApp.getCurrentProject();
     this.elements.todoList.innerHTML = "";
 
@@ -107,7 +106,7 @@ class UiController {
       editBtn.textContent = "Edit";
       editBtn.addEventListener("click", (e) => {
         e.stopPropagation();
-        openTodoModal(todo);
+        this.openTodoModal(todo);
       });
 
       const deleteBtn = document.createElement("button");
@@ -131,7 +130,7 @@ class UiController {
 
       this.elements.todoList.appendChild(li);
     });
-  };
+  }
 
   openTodoModal = (todo = null) => {
     const isEditing = !!todo;
